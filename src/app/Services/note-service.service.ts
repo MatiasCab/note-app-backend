@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { Note } from '../Interfaces/Note';
 import { CITYS } from '../Mocks/mock-ciudades';
@@ -13,11 +14,15 @@ const NOTES_API_URL = "http://localhost:3001/v1/notes";
 
 export class NoteServiceService {
 
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+
   notas?: Map<string, Note>;
   invisibleNotes?: Map<string, Note>;
 
 
-  constructor(private servicioTemperatura: TemperaturaService, private http: HttpClient) {
+  constructor(private servicioTemperatura: TemperaturaService, private http:HttpClient) {
     this.notas = new Map<string, Note>();
     this.invisibleNotes = new Map<string, Note>();
   }
@@ -83,9 +88,7 @@ export class NoteServiceService {
   }
 
   editarNota(nota: Note) {
-    if (this.notas) {
       nota.fechaFormateada = this.formatearFecha(new Date(nota.fechaFormateada));
-      this.notas.set(nota.id, nota);
-    }
+      return this.http.put(NODES_API_URL+ '/' + nota.id, nota, this.httpOptions);
   }
 }

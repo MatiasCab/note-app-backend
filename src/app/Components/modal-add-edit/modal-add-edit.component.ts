@@ -59,7 +59,7 @@ export class ModalAddEditComponent implements OnInit {
       }
       this.servicioNotas.crearNota(this.nota);
     } else {
-      this.servicioNotas.editarNota(this.nota);
+      this.servicioNotas.editarNota(this.nota).subscribe();
     }
     this.modalActivo.close();
   }
