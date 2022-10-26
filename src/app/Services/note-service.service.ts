@@ -1,14 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+
 import { Injectable } from '@angular/core';
 import { Note } from '../Interfaces/Note';
 import { CITYS } from '../Mocks/mock-ciudades';
 import { TemperaturaService } from './temperatura.service';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-
-
-const NOTESAPIURL = 'http://localhost:3001/v1/notes';
-
+const NODES_API_URL = 'http://localhost:3001/v1/notes';
 
 @Injectable({
   providedIn: 'root'
@@ -52,7 +50,6 @@ export class NoteServiceService {
     if (this.notas) {
       nota.id = `${Math.floor(Math.random() * 1000000)}`;
       nota.clase = nota.clase == "" ? "bg-light" : nota.clase;
-      this.notas.set(nota.id, nota);
       let fecha = nota.fechaFormateada == "" ? new Date(Date.now()) : new Date(nota.fechaFormateada);
       nota.fechaFormateada = this.formatearFecha(fecha);
       let ciudad = {
@@ -60,17 +57,10 @@ export class NoteServiceService {
         lat: CITYS[nota.ciudad].lat,
         long: CITYS[nota.ciudad].long
       }
-      try {
-        this.servicioTemperatura.getWeather(fecha, ciudad)
-        .subscribe(x => {
-          let hour = fecha.getHours();
-          let temperature = x.hourly.temperature_2m[hour];
-          nota.temperatura = temperature ? `${temperature} °C` : "";
-        });
-    } catch (x){
-      console.log("ERROR AL OBTENER LA FECHA");
+      this.http.post<any>(NODES_API_URL, nota).subscribe(noteId => {
+        this.notas?.set(noteId, nota);
+      });
     }
-  }
   }
 
   fillNotes(colors : string[]){
@@ -98,6 +88,6 @@ export class NoteServiceService {
 
   editarNota(nota: Note) {
       nota.fechaFormateada = this.formatearFecha(new Date(nota.fechaFormateada));
-      this.http.put(NOTESAPIURL, nota, this.httpOptions);
+      return this.http.put(NODES_API_URL+ '/' + nota.id, nota, this.httpOptions);
   }
 }
