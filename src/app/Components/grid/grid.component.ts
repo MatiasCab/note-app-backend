@@ -14,6 +14,8 @@ export class GridComponent implements OnInit {
   @Output() newToggleEmitter = new EventEmitter<string>();
   
   constructor(private servicioNotas: NoteServiceService) {
+
+
     if (this.servicioNotas.notas) {
       this.notas = this.servicioNotas.notas;
     } else {
@@ -21,7 +23,16 @@ export class GridComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void { 
+    this.servicioNotas.obtenerNotas().subscribe(notas => {
+      if (notas) {
+        for(let nota of notas){
+
+        }
+        this.notas.set(nota.id, nota);
+      }
+    });
+   }
 
   darkMode(){
     this.newToggleEmitter.emit("dark");

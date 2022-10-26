@@ -5,16 +5,16 @@ import { TemperaturaService } from './temperatura.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const NODES_API_URL = 'http://localhost:3001/v1/notes';
+const NOTES_API_URL = "http://localhost:3001/v1/notes";
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class NoteServiceService {
 
   notas?: Map<string, Note>;
   invisibleNotes?: Map<string, Note>;
-
 
 
   constructor(private servicioTemperatura: TemperaturaService, private http: HttpClient) {
@@ -22,11 +22,12 @@ export class NoteServiceService {
     this.invisibleNotes = new Map<string, Note>();
   }
 
-  obtenerNota(id: string): Note | undefined {
-    if (this.notas) {
-      return this.notas.get(id);
-    }
-    return undefined;
+  obtenerNotas(): Observable<Note | undefined> {
+    return this.http.get<Note>(NOTES_API_URL);
+  }
+
+  obtenerNota(id: string): Observable<Note | undefined> {
+    return this.http.get<Note>(NOTES_API_URL + "/" + id);
   }
 
   eliminarNota(id: string | undefined) {
@@ -52,7 +53,7 @@ export class NoteServiceService {
         lat: CITYS[nota.ciudad].lat,
         long: CITYS[nota.ciudad].long
       }
-      this.http.post<any>(NODES_API_URL, nota).subscribe(noteId => {
+      this.http.post<any>(NOTES_API_URL, nota).subscribe(noteId => {
         this.notas?.set(noteId, nota);
       });
     }
