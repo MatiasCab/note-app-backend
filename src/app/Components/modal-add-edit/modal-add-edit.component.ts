@@ -1,9 +1,11 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+
 import { Note, EmptyNote } from 'src/app/Interfaces/Note';
-import { CITYS } from 'src/app/Mocks/mock-ciudades';
 import { COLOURS } from 'src/app/Mocks/mock-colores';
 import { Color } from 'src/app/Interfaces/Color';
+import { City } from './../../Interfaces/city';
+import { PlacesService } from './../../Services/places.service';
 
 import { NoteServiceService } from 'src/app/Services/note-service.service';
 
@@ -21,11 +23,13 @@ export class ModalAddEditComponent implements OnInit {
   textoBoton: string = 'Agregar';
 
   // Datos mockeados
-  ciudades: string[] = [];
-  
+  ciudades: City[] = [];
+
   colores: Color[] = COLOURS;
 
-  constructor(public modalActivo: NgbActiveModal, private servicioNotas: NoteServiceService) { }
+  constructor(public modalActivo: NgbActiveModal,
+              private servicioNotas: NoteServiceService,
+              private placesService: PlacesService) { }
 
   ngOnInit(): void {
     if (this.notaEntrada) {
@@ -34,9 +38,9 @@ export class ModalAddEditComponent implements OnInit {
       this.nota = { ...this.notaEntrada };
       this.nota.fechaFormateada = this.formatearFecha(this.notaEntrada.fechaFormateada);
     }
-    for(const city in CITYS){
-      this.ciudades.push(city)
-    }
+    this.placesService.getPlaces().subscribe(places => {
+      this.ciudades = places;
+    });
   }
 
   formatearFecha(input: string): string {
@@ -49,7 +53,7 @@ export class ModalAddEditComponent implements OnInit {
 
   guardarNota() {
     if (!this.nota.id) {
-      if(this.nota.ciudad == "") {
+      if(!this.nota.ciudad) {
         alert("Seleccione una ciudad")
         return;
       }

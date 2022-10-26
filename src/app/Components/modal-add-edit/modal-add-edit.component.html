@@ -14,7 +14,7 @@
     <!-- Ciudad -->
     <select #city class="form-select" placeholder="Ciudad" [(ngModel)]="nota.ciudad">
         <option selected disabled value="">Seleccione una ciudad</option>
-        <option *ngFor="let ciudad of ciudades" value="{{ciudad}}">{{ciudad}}</option>
+        <option *ngFor="let ciudad of ciudades" value="{{ciudad.city}}">{{ciudad.city}}</option>
     </select>
     <!-- Fecha y hora -->
     <div class="input-group">
