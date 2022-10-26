@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Note } from '../Interfaces/Note';
 import { CITYS } from '../Mocks/mock-ciudades';
 import { TemperaturaService } from './temperatura.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+const NODES_API_URL = 'http://localhost:3001/v1/notes';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +16,8 @@ export class NoteServiceService {
   invisibleNotes?: Map<string, Note>;
 
 
-  constructor(private servicioTemperatura: TemperaturaService) {
+
+  constructor(private servicioTemperatura: TemperaturaService, private http: HttpClient) {
     this.notas = new Map<string, Note>();
     this.invisibleNotes = new Map<string, Note>();
   }
@@ -40,7 +45,6 @@ export class NoteServiceService {
     if (this.notas) {
       nota.id = `${Math.floor(Math.random() * 1000000)}`;
       nota.clase = nota.clase == "" ? "bg-light" : nota.clase;
-      this.notas.set(nota.id, nota);
       let fecha = nota.fechaFormateada == "" ? new Date(Date.now()) : new Date(nota.fechaFormateada);
       nota.fechaFormateada = this.formatearFecha(fecha);
       let ciudad = {
@@ -48,17 +52,10 @@ export class NoteServiceService {
         lat: CITYS[nota.ciudad].lat,
         long: CITYS[nota.ciudad].long
       }
-      try {
-        this.servicioTemperatura.getWeather(fecha, ciudad)
-        .subscribe(x => {
-          let hour = fecha.getHours();
-          let temperature = x.hourly.temperature_2m[hour];
-          nota.temperatura = temperature ? `${temperature} °C` : "";
-        });
-    } catch (x){
-      console.log("ERROR AL OBTENER LA FECHA");
+      this.http.post<any>(NODES_API_URL, nota).subscribe(noteId => {
+        this.notas?.set(noteId, nota);
+      });
     }
-  }
   }
 
   fillNotes(colors : string[]){
