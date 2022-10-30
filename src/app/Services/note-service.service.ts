@@ -34,10 +34,8 @@ export class NoteServiceService {
     return undefined;
   }
 
-  eliminarNota(id: string | undefined) {
-    if (this.notas && id) {
-      this.notas.delete(id);
-    }
+  eliminarNota(id: string) {
+    return this.http.delete<any>(NODES_API_URL + `/${id}`);
   }
 
   formatearFecha(fecha: Date){
