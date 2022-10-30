@@ -16,8 +16,10 @@ export class ModalDeleteComponent implements OnInit {
   }
 
   delete() {
-    this.noteService.eliminarNota(this.noteId);
-    this.modalActivo.close();
+    this.noteService.eliminarNota(this.noteId!)
+    .subscribe(() => {
+      this.modalActivo.close();
+    });
   }
 
   cancel() {
