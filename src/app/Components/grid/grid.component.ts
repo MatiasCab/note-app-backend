@@ -21,7 +21,9 @@ export class GridComponent implements OnInit {
     }
   }
 
-  ngOnInit(): void {  }
+  ngOnInit(): void { 
+    
+   }
 
   darkMode(){
     this.newToggleEmitter.emit("dark");

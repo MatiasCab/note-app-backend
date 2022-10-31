@@ -6,7 +6,7 @@ import { TemperaturaService } from './temperatura.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const NODES_API_URL = 'http://localhost:3001/v1/notes';
+const NODES_API_URL = 'http://localhost:3002/v1/notes';
 
 @Injectable({
   providedIn: 'root'
@@ -27,13 +27,13 @@ export class NoteServiceService {
     this.invisibleNotes = new Map<string, Note>();
   }
 
-  obtenerNota(id: string): Note | undefined {
-    if (this.notas) {
-      return this.notas.get(id);
-    }
-    return undefined;
+  obtenerNotas(): Observable<Note[] | undefined> {
+    return this.http.get<Note[]>(NODES_API_URL);
   }
 
+  obtenerNota(id: string): Observable<Note | undefined> {
+    return this.http.get<Note>(NODES_API_URL + "/" + id);
+  }
   eliminarNota(id: string) {
     return this.http.delete<any>(NODES_API_URL + `/${id}`);
   }
@@ -46,7 +46,6 @@ export class NoteServiceService {
 
   crearNota(nota: Note) {
     if (this.notas) {
-      nota.id = `${Math.floor(Math.random() * 1000000)}`;
       nota.clase = nota.clase == "" ? "bg-light" : nota.clase;
       let fecha = nota.fechaFormateada == "" ? new Date(Date.now()) : new Date(nota.fechaFormateada);
       nota.fechaFormateada = this.formatearFecha(fecha);
@@ -86,6 +85,6 @@ export class NoteServiceService {
 
   editarNota(nota: Note) {
       nota.fechaFormateada = this.formatearFecha(new Date(nota.fechaFormateada));
-      return this.http.put(NODES_API_URL+ '/' + nota.id, nota, this.httpOptions);
+      return this.http.put(NODES_API_URL+ '/' + nota._id, nota, this.httpOptions);
   }
 }
