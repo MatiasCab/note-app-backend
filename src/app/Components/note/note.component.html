@@ -1,10 +1,10 @@
 <div *ngIf="note">
-    <div id="{{note.id}}" class="card {{note.clase}}" (click)="abrirModalEditar()">
+    <div id="{{note._id}}" class="card {{note.clase}}" (click)="abrirModalEditar()">
         <div class="card-header">
-            <h5 id="{{note.id}}TargetTitle" class="card-title w-100 text-center">{{note.titulo}}</h5>
+            <h5 id="{{note._id}}TargetTitle" class="card-title w-100 text-center">{{note.titulo}}</h5>
         </div>
         <div class="card-body">
-            <p id="{{note.id}}TargetText" class="card-text">{{note.cuerpo}}</p>
+            <p id="{{note._id}}TargetText" class="card-text">{{note.cuerpo}}</p>
             <div class="d-flex justify-content-end">
                 <button type="button" class="btn btn-danger btn-outline-dark" (click)="openModalDelete();$event.stopPropagation()">
                     <i class="bi bi-trash3-fill"></i>
@@ -13,8 +13,8 @@
         </div>
         <div class="card-footer container">
             <div class="row">
-                <p class="col fw-light" id="{{note.id}}TargetCity">{{note.ciudad}} - {{note.temperatura}}</p>
-                <p class="col-auto fw-light text-end" id="{{note.id}}TargetDate">{{note.fechaFormateada}}</p>
+                <p class="col fw-light" id="{{note._id}}TargetCity">{{note.ciudad}} - {{note.temperatura}}</p>
+                <p class="col-auto fw-light text-end" id="{{note._id}}TargetDate">{{note.fechaFormateada}}</p>
             </div>
         </div>
     </div>

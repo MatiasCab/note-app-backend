@@ -52,7 +52,7 @@ export class ModalAddEditComponent implements OnInit {
   }
 
   guardarNota() {
-    if (!this.nota.id) {
+    if (!this.nota._id) {
       if(!this.nota.ciudad) {
         alert("Seleccione una ciudad")
         return;

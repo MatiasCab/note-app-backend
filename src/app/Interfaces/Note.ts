@@ -1,5 +1,5 @@
 export interface Note {
-  id: string;
+  _id: string;
   clase: string;
   titulo: string;
   ciudad: string;
@@ -9,7 +9,7 @@ export interface Note {
 }
 
 export class EmptyNote implements Note {
-  id: string = '';
+  _id: string = '';
   clase: string = '';
   titulo: string = '';
   ciudad: string = '';

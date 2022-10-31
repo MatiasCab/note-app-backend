@@ -1,4 +1,7 @@
-import { Component, OnInit, EventEmitter, Output} from '@angular/core';
+
+
+
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Note } from 'src/app/Interfaces/Note';
 import { NoteServiceService } from 'src/app/Services/note-service.service';
 
@@ -9,10 +12,10 @@ import { NoteServiceService } from 'src/app/Services/note-service.service';
 })
 export class GridComponent implements OnInit {
 
-  notas: Map<string, Note>;
+  notas?: Note[] = [];
 
   @Output() newToggleEmitter = new EventEmitter<string>();
-  
+
   constructor(private servicioNotas: NoteServiceService) {
 
 
@@ -20,7 +23,7 @@ export class GridComponent implements OnInit {
       this.notas = this.servicioNotas.notas;
     } else {
       this.notas = new Map<string, Note>();
-    }
+        } */
   }
 
   ngOnInit(): void { 
@@ -34,8 +37,16 @@ export class GridComponent implements OnInit {
     });
    }
 
-  darkMode(){
+    this.servicioNotas.obtenerNotas().subscribe(notas => {
+      console.log("NOTAS", notas);
+      if (notas) {
+        this.notas = notas;
+      }
+    });
+    console.log("notita", this.notas);
+  }
+  darkMode() {
     this.newToggleEmitter.emit("dark");
-  } 
+  }
 
 }
