@@ -19,7 +19,11 @@ export class NoteServiceService {
   refresh = new EventEmitter<void>();
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Origin': '*'
+    })
   };
 
   notas?: Map<string, Note>;
@@ -54,7 +58,7 @@ export class NoteServiceService {
   }
 
   obtenerNotas(): Observable<Note[] | undefined> {
-    return this.http.get<Note[]>(NODES_API_URL);
+    return this.http.get<Note[]>(NODES_API_URL, this.httpOptions);
   }
 
   obtenerNota(id: string): Observable<Note | undefined> {
