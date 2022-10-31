@@ -15,4 +15,8 @@ export class PlacesService {
   getPlaces(): Observable<City[]> {
     return this.http.get<City[]>(PLACES_SERVICE_URL);
   }
+
+  getPlace(name: string):Observable<City> {
+    return this.http.get<City>(`${PLACES_SERVICE_URL}/${name}`);
+  }
 }

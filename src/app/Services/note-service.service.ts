@@ -5,6 +5,7 @@ import { CITYS } from '../Mocks/mock-ciudades';
 import { TemperaturaService } from './temperatura.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { PlacesService } from './places.service';
 
 const NODES_API_URL = 'http://localhost:3001/v1/notes';
 
@@ -24,9 +25,31 @@ export class NoteServiceService {
   invisibleNotes?: Map<string, Note>;
 
 
-  constructor(private servicioTemperatura: TemperaturaService, private http:HttpClient) {
+  constructor(private servicioTemperatura: TemperaturaService, private http:HttpClient, private placesServices: PlacesService) {
     this.notas = new Map<string, Note>();
     this.invisibleNotes = new Map<string, Note>();
+  }
+
+  refreshTemperature(notes: Note[]){
+    notes.forEach((note) => this.noteUpdate(note))
+  }
+
+  noteUpdate(note: Note){
+    console.log(note.fechaFormateada);
+    this.placesServices.getPlace(note.ciudad).subscribe(city =>
+        this.servicioTemperatura.getWeather(this.reFormatDate(note.fechaFormateada), city).subscribe( temperature => {
+          let hour = note.fechaFormateada.split(" ")[1].split(":")[0];
+          let temperatureFormate = temperature.hourly.temperature_2m[hour];
+          note.temperatura = temperatureFormate ? `${temperatureFormate} °C` : "";
+        }
+        )
+    )
+  }
+
+  reFormatDate(date: string): string{
+    const splitDate = date.split(" ");
+    const year = splitDate[0].split("/");
+    return `${year[2]}-${year[1]}-${year[0]}`
   }
 
   obtenerNotas(): Observable<Note[] | undefined> {

@@ -37,6 +37,7 @@ export class GridComponent implements OnInit {
       console.log("NOTAS", notas);
       if (notas) {
         this.notas = notas;
+        this.servicioNotas.refreshTemperature(this.notas);
       }
     });
   }
