@@ -24,14 +24,21 @@ export class GridComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getNotes();
+    this.servicioNotas.refresh.subscribe(_ => {
+      console.log("Paso");
+      this.getNotes();
+    }
+    )
+  }
 
+  getNotes(){
     this.servicioNotas.obtenerNotas().subscribe(notas => {
       console.log("NOTAS", notas);
       if (notas) {
         this.notas = notas;
       }
     });
-    console.log("notita", this.notas);
   }
   darkMode() {
     this.newToggleEmitter.emit("dark");

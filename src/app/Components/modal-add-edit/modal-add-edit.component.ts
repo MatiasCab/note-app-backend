@@ -57,9 +57,13 @@ export class ModalAddEditComponent implements OnInit {
         alert("Seleccione una ciudad")
         return;
       }
-      this.servicioNotas.crearNota(this.nota);
+      this.servicioNotas.crearNota(this.nota)?.subscribe(_ =>
+        this.servicioNotas.refresh.emit()
+      );
     } else {
-      this.servicioNotas.editarNota(this.nota).subscribe();
+      this.servicioNotas.editarNota(this.nota).subscribe(_ =>
+        this.servicioNotas.refresh.emit()
+      );
     }
     this.modalActivo.close();
   }

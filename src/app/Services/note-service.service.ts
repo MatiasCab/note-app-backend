@@ -1,18 +1,20 @@
 
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 import { Note } from '../Interfaces/Note';
 import { CITYS } from '../Mocks/mock-ciudades';
 import { TemperaturaService } from './temperatura.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-const NODES_API_URL = 'http://localhost:3002/v1/notes';
+const NODES_API_URL = 'http://localhost:3001/v1/notes';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class NoteServiceService {
+
+  refresh = new EventEmitter<void>();
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -47,7 +49,6 @@ export class NoteServiceService {
 
   crearNota(nota: Note) {
     if (this.notas) {
-      nota.id = `${Math.floor(Math.random() * 1000000)}`;
       nota.clase = nota.clase == "" ? "bg-light" : nota.clase;
       let fecha = nota.fechaFormateada == "" ? new Date(Date.now()) : new Date(nota.fechaFormateada);
       nota.fechaFormateada = this.formatearFecha(fecha);
@@ -56,10 +57,9 @@ export class NoteServiceService {
         lat: CITYS[nota.ciudad].lat,
         long: CITYS[nota.ciudad].long
       }
-      this.http.post<any>(NODES_API_URL, nota).subscribe(noteId => {
-        this.notas?.set(noteId, nota);
-      });
+      return this.http.post<any>(NODES_API_URL, nota);
     }
+    return;
   }
 
   fillNotes(colors : string[]){
