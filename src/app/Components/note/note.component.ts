@@ -23,7 +23,8 @@ export class NoteComponent implements OnInit {
   }
 
   openModalDelete() {
+    console.log(this.note);
     const modal = this.modalService.open(ModalDeleteComponent);
-    (modal.componentInstance as ModalDeleteComponent).noteId = this.note!._id;
+    (modal.componentInstance as ModalDeleteComponent).noteId = this.note?._id;
   }
 }
