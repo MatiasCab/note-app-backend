@@ -1,7 +1,7 @@
 <div class="container">
     <div class="row" id="tarjetas">
-        <div class="col-sm-4 mb-3" *ngFor="let nota of notas | keyvalue">
-            <app-note [note]="nota.value"></app-note>
+        <div class="col-sm-4 mb-3" *ngFor="let nota of notas">
+            <app-note [note]="nota"></app-note>
         </div>
     </div>
 </div>
