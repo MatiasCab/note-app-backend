@@ -6,8 +6,9 @@ import { TemperaturaService } from './temperatura.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PlacesService } from './places.service';
+import { environment } from 'src/environments/environment';
 
-const NODES_API_URL = 'http://localhost:3001/v1/notes';
+const NODES_API_URL = `${environment.baseApiUrl}/v1/notes`;
 
 @Injectable({
   providedIn: 'root'
